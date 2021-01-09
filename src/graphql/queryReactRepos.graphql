@@ -1,0 +1,19 @@
+query ReactRepos($query: String!, $type: SearchType!, $first: Int) {
+  search(query: $query, type: $type, first: $first) {
+    repositoryCount
+    pageInfo {
+      startCursor
+      hasNextPage
+      endCursor
+      hasPreviousPage
+    }
+    nodes {
+      ... on Repository {
+        name
+        forkCount
+        stargazerCount
+        url
+      }
+    }
+  }
+}
