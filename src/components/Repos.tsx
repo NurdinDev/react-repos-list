@@ -65,7 +65,11 @@ export const Repos: React.FC = () => {
   return (
     <>
       {getDataSource.length ? (
-        <Table columns={columns} dataSource={getDataSource} size="middle" />
+        <Table<RepoType>
+          columns={columns}
+          dataSource={getDataSource}
+          size="middle"
+        />
       ) : null}
     </>
   );
