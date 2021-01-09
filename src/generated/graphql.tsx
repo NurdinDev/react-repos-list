@@ -18953,6 +18953,7 @@ export type GitHubSearchQuery = (
   { __typename?: 'Query' }
   & { search: (
     { __typename?: 'SearchResultItemConnection' }
+    & Pick<SearchResultItemConnection, 'repositoryCount'>
     & { pageInfo: (
       { __typename?: 'PageInfo' }
       & Pick<PageInfo, 'endCursor' | 'hasNextPage' | 'hasPreviousPage' | 'startCursor'>
@@ -18981,6 +18982,7 @@ export type MeQuery = (
 export const GitHubSearchDocument = gql`
     query GitHubSearch($type: SearchType!, $query: String!) {
   search(type: $type, query: $query, first: 10) {
+    repositoryCount
     pageInfo {
       endCursor
       hasNextPage

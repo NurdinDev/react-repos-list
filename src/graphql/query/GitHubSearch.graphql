@@ -1,5 +1,6 @@
 query GitHubSearch($type: SearchType!, $query: String!) {
   search(type: $type, query: $query, first: 10) {
+    repositoryCount
     pageInfo {
       endCursor
       hasNextPage

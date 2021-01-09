@@ -1,5 +1,5 @@
 import { SearchType, useGitHubSearchQuery } from "../generated/graphql";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 
@@ -8,10 +8,13 @@ interface RepoType {
   name: string;
   stargazerCount: string;
   forkCount: string;
-  url: string
+  url: string;
 }
 
 export const Repos: React.FC = () => {
+  const [page, setPage] = useState(null);
+  const [pageInfo, setPageInfo] = useState({});
+
   const [{ data, fetching }] = useGitHubSearchQuery({
     variables: { type: SearchType.Repository, query: "topic:react" },
   });
@@ -33,13 +36,19 @@ export const Repos: React.FC = () => {
     []
   );
   const edges = useMemo(() => data?.search?.edges, [data]);
+  const totalCount = useMemo(() => data?.search?.repositoryCount, [data]);
+
+  useEffect(() => {
+    if (data) {
+      setPageInfo(data.search?.pageInfo);
+    }
+  }, [data]);
 
   const getDataSource: RepoType[] = useMemo(() => {
     const arr: RepoType[] = [];
     if (edges) {
-      edges.forEach((repo, index) => {
+      edges.forEach((repo) => {
         if (repo && repo.node) {
-          console.log(repo.node);
           const { id, name, url, stargazerCount, forkCount } = {
             name: "",
             stargazerCount: 0,
@@ -64,20 +73,28 @@ export const Repos: React.FC = () => {
   if (fetching) {
     return <p>Loading...</p>;
   }
+
+  const changePage = (page: any, pageSize: any) => {
+    console.log("changePage", page, pageSize);
+    // @TODO compleat pagination functionality
+    setPage(page);
+  };
+
   return (
     <>
       {getDataSource.length ? (
         <Table<RepoType>
           onRow={(record, rowIndex) => {
             return {
-              onClick: event => {
-                window.open(record.url, '_black');
-              }
-            }
+              onClick: (event) => {
+                window.open(record.url, "_black");
+              },
+            };
           }}
           columns={columns}
           pagination={{
-            total: 50,
+            total: totalCount,
+            onChange: changePage,
           }}
           dataSource={getDataSource}
           size="middle"
