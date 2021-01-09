@@ -18956,10 +18956,13 @@ export type GitHubSearchQuery = (
     & { pageInfo: (
       { __typename?: 'PageInfo' }
       & Pick<PageInfo, 'endCursor' | 'hasNextPage' | 'hasPreviousPage' | 'startCursor'>
-    ), nodes?: Maybe<Array<Maybe<{ __typename?: 'App' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | (
-      { __typename?: 'Repository' }
-      & Pick<Repository, 'id' | 'name' | 'stargazerCount' | 'forkCount' | 'url'>
-    ) | { __typename?: 'User' }>>> }
+    ), edges?: Maybe<Array<Maybe<(
+      { __typename?: 'SearchResultItemEdge' }
+      & { node?: Maybe<{ __typename?: 'App' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | (
+        { __typename?: 'Repository' }
+        & Pick<Repository, 'id' | 'name' | 'stargazerCount' | 'forkCount' | 'url'>
+      ) | { __typename?: 'User' }> }
+    )>>> }
   ) }
 );
 
@@ -18984,13 +18987,15 @@ export const GitHubSearchDocument = gql`
       hasPreviousPage
       startCursor
     }
-    nodes {
-      ... on Repository {
-        id
-        name
-        stargazerCount
-        forkCount
-        url
+    edges {
+      node {
+        ... on Repository {
+          id
+          name
+          stargazerCount
+          forkCount
+          url
+        }
       }
     }
   }
