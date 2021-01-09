@@ -8,6 +8,7 @@ interface RepoType {
   name: string;
   stargazerCount: string;
   forkCount: string;
+  url: string
 }
 
 export const Repos: React.FC = () => {
@@ -50,6 +51,7 @@ export const Repos: React.FC = () => {
           arr.push({
             key: id as number,
             name,
+            url,
             stargazerCount: `${stargazerCount} 🌟`,
             forkCount: `${forkCount} 🍴`,
           });
@@ -66,7 +68,17 @@ export const Repos: React.FC = () => {
     <>
       {getDataSource.length ? (
         <Table<RepoType>
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: event => {
+                window.open(record.url, '_black');
+              }
+            }
+          }}
           columns={columns}
+          pagination={{
+            total: 50,
+          }}
           dataSource={getDataSource}
           size="middle"
         />
