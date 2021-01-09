@@ -1,9 +1,23 @@
+import React from "react";
+import { createClient, Provider } from "urql";
+import { Repos } from "./components/Repos";
+
+
+
+const client = createClient({
+  url: "https://api.github.com/graphql",
+  fetchOptions: {
+    headers: {
+      authorization: `Bearer ${process.env.REACT_APP_GITHUB_PERSONAL_TOKEN}`,
+    },
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-     Hello
-    </div>
+    <Provider value={client}>
+      <Repos />
+    </Provider>
   );
 }
 

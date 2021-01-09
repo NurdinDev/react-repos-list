@@ -1,0 +1,19 @@
+query GitHubSearch($type: SearchType!, $query: String!) {
+  search(type: $type, query: $query, first: 10) {
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+    nodes {
+      ... on Repository {
+        id
+        name
+        stargazerCount
+        forkCount
+        url
+      }
+    }
+  }
+}
